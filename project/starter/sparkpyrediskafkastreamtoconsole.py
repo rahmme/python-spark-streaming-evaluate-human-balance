@@ -30,12 +30,11 @@ customerJSONSchema = StructType(
 )
 
 # create a StructType for the Kafka stedi-events topic which has the Customer Risk JSON that comes from Redis
-customerJSONSchema = StructType(
+customerRiskJSONSchema = StructType(
     [
-        StructField("customerName", StringType()),
-        StructField("email", StringType()),
-        StructField("phone", StringType()),
-        StructField("birthDay", StringType())
+        StructField("customer", StringType()),
+        StructField("score", DoubleType()),
+        StructField("riskDate", DateType())
     ]
 )
 
@@ -55,7 +54,7 @@ redisServerRawStreamingDF = spark \
 # cast the value column in the streaming dataframe as a STRING
 redisServerStreamingDF = redisServerRawStreamingDF.selectExpr("cast(value as string) value")
 
-# TO-DO:; parse the single column "value" with a json object in it, like this:
+# parse the single column "value" with a json object in it, like this:
 # +------------+
 # | value      |
 # +------------+

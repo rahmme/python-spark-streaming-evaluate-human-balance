@@ -120,9 +120,9 @@ zSetDecodedEntriesStreamingDF = zSetEntriesEncodedStreamingDF \
     .withColumn("customer", unbase64(zSetEntriesEncodedStreamingDF.encodedCustomer).cast("string"))
 
 # parse the JSON in the Customer record and store in a temporary view called CustomerRecords
-zSetDecodedEntriesStreamingDF\
-    .withColumn("customer", from_json("customer", customerJSONSchema))\
-    .select(col('customer.*'))\
+zSetDecodedEntriesStreamingDF \
+    .withColumn("customer", from_json("customer", customerJSONSchema)) \
+    .select(col('customer.*')) \
     .createOrReplaceTempView("CustomerRecords")
 
 # JSON parsing will set non-existent fields to null, so let's select just the fields we want,
@@ -137,7 +137,7 @@ emailAndBirthDayStreamingDF = spark.sql(
 )
 
 # from the emailAndBirthDayStreamingDF dataframe select the email and the birth year (using the split function)
-emailAndBirthYearStreamingDF = emailAndBirthDayStreamingDF\
+emailAndBirthYearStreamingDF = emailAndBirthDayStreamingDF \
     .select('email', split(emailAndBirthDayStreamingDF.birthDay, "-").getItem(0).alias("birthYear"))
 
 # sink the emailAndBirthYearStreamingDF dataframe to the console in append mode
